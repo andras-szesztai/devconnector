@@ -17,7 +17,6 @@ export const loadUser = () => async (dispatch) => {
   }
   try {
     const res = await axios.get("/api/auth")
-    console.log("loadUser -> res", res)
     dispatch({ type: USER_LOADED, payload: res.data })
   } catch (err) {
     dispatch({ type: AUTH_ERROR })
