@@ -8,6 +8,7 @@ const router = express.Router()
 const auth = require("../../middleware/auth")
 const Profile = require("../../models/Profile")
 const User = require("../../models/User")
+const Post = require("../../models/Post")
 
 // @route     GET api/profile/me
 // @desc      Get current users profile
@@ -209,6 +210,7 @@ router.put(
 // @access    Private
 router.delete("/experience/:exp_id", auth, async (req, res) => {
   try {
+    await Post.deleteMany({ user: req.user.id })
     const profile = await Profile.findOne({ user: req.user.id })
     const removeIndex = profile.experience
       .map((item) => item.id)
