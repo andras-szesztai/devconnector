@@ -1,10 +1,15 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { connect } from "react-redux"
 import { Link, withRouter } from "react-router-dom"
 
-import { creatProfile } from "../../actions/profile"
+import { creatProfile, getCurrentProfile } from "../../actions/profile"
 
-const CreateProfile = ({ creatProfile, history }) => {
+const EditProfile = ({
+  creatProfile,
+  history,
+  profile: { profile, loading },
+  getCurrentProfile,
+}) => {
   const [formData, setFormData] = useState({
     company: "",
     website: "",
@@ -34,6 +39,30 @@ const CreateProfile = ({ creatProfile, history }) => {
     instagram,
   } = formData
 
+  const isInit = React.useRef(false)
+  useEffect(() => {
+    if (!isInit.current) {
+      getCurrentProfile()
+      isInit.current = true
+    }
+    if (!status && profile && profile.status && !loading) {
+      setFormData({
+        company: !profile.company ? "" : profile.company,
+        website: !profile.website ? "" : profile.website,
+        location: !profile.location ? "" : profile.location,
+        status: !profile.status ? "" : profile.status,
+        skills: !profile.skills ? "" : profile.skills,
+        githubusername: !profile.githubusername ? "" : profile.githubusername,
+        bio: !profile.bio ? "" : profile.bio,
+        twitter: !profile.twitter ? "" : profile.twitter,
+        facebook: !profile.facebook ? "" : profile.facebook,
+        linkedin: !profile.linkedin ? "" : profile.linkedin,
+        youtube: !profile.youtube ? "" : profile.youtube,
+        instagram: !profile.instagram ? "" : profile.instagram,
+      })
+    }
+  }, [loading])
+
   const [displaySocialInputs, toggleDisplaySocialInputs] = useState(false)
 
   const onChange = (e) =>
@@ -41,7 +70,7 @@ const CreateProfile = ({ creatProfile, history }) => {
 
   const onSubmit = (e) => {
     e.preventDefault()
-    creatProfile(formData, history)
+    creatProfile(formData, history, true)
   }
 
   return (
@@ -219,4 +248,10 @@ const CreateProfile = ({ creatProfile, history }) => {
   )
 }
 
-export default connect(null, { creatProfile })(withRouter(CreateProfile))
+const mapStateToProps = (state) => ({
+  profile: state.profile,
+})
+
+export default connect(mapStateToProps, { creatProfile, getCurrentProfile })(
+  withRouter(EditProfile)
+)
