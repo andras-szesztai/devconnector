@@ -61,7 +61,7 @@ const EditProfile = ({
         instagram: !profile.instagram ? "" : profile.instagram,
       })
     }
-  }, [loading])
+  }, [loading, getCurrentProfile])
 
   const [displaySocialInputs, toggleDisplaySocialInputs] = useState(false)
 
