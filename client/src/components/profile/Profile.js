@@ -39,7 +39,7 @@ const Profile = ({
       <div class="profile-grid my-1">
         {profile && (
           <>
-            <ProfileAbout profile={profile} />
+            <ProfileTop profile={profile} />
             <ProfileAbout profile={profile} />
           </>
         )}
